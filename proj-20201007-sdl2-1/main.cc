@@ -61,50 +61,43 @@ int main(int, char**)
 
 
 		SDL_SetRenderDrawColor(ren.get(), 255, 255, 255, 255);
-
-		int centreX=300;
-		int centreY=400;
-		int radius = 100;
-		const int diameter = (radius * 2);
-
-		int x = (radius - 1);
-		int y = 0;
-		int tx = 1;
-		int ty = 1;
-		int error = (tx - diameter);
+		int radius = 50;
+		int x0=300;
+		int y0=400;
+		int x=0;
+		int y=radius;
+		int delta = 1-2*radius;
+		int error = 0;
 
 		while (x >= y)
 		{
-		SDL_RenderDrawPoint(ren.get(), centreX + x, centreY - y);
-		SDL_RenderDrawPoint(ren.get(), centreX + x, centreY + y);
-		SDL_RenderDrawPoint(ren.get(), centreX - x, centreY - y);
-		SDL_RenderDrawPoint(ren.get(), centreX - x, centreY + y);
-		SDL_RenderDrawPoint(ren.get(), centreX + y, centreY - x);
-		SDL_RenderDrawPoint(ren.get(), centreX + y, centreY + x);
-		SDL_RenderDrawPoint(ren.get(), centreX - y, centreY - x);
-		SDL_RenderDrawPoint(ren.get(), centreX - y, centreY + x);
+		SDL_RenderDrawPoint(ren.get(), x0 + x, y0 + y);
+		SDL_RenderDrawPoint(ren.get(), x0 + x, y0 - y);
+		SDL_RenderDrawPoint(ren.get(), x0 - x, y0 + y);
+		SDL_RenderDrawPoint(ren.get(), x0 - x, y0 - y);
 
-		if (error <= 0)
+
+		if (delta < 0&& error<=0)
 		{
-		++y;
-		error += ty;
-		ty += 2;
+		++x;
+		delta += 2*x+1;
+		continue;
 		}
 
-		if (error > 0)
-		{
-		--x;
-		tx += 2;
-		error += (tx - diameter);
+		error = 2*(delta - x)-1;
+		if (delta>0&&error>0){
+			--y;
+			delta +=1-2*y;
 		}
-		}
-
+		++x;
+		delta +=2*(x-y);
+		--y;
 
 
 			}
 		SDL_RenderPresent(ren.get());
 
-
+	}
 
 	return 0;
 	}
